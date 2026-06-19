@@ -1,0 +1,2797 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Faction Ruby - Loyauté & Fiabilité. Découvrez notre faction, nos valeurs, notre code et rejoignez les rangs des Rubis.">
+<title>Faction Ruby — Loyauté &amp; Fiabilité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES / DESIGN TOKENS ===== */
+:root {
+  --bg-deepest: #05050a;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121e;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #22223a;
+  --ruby: #e0115f;
+  --ruby-light: #ff1a6e;
+  --ruby-dark: #b00e4d;
+  --ruby-glow: rgba(224, 17, 95, 0.4);
+  --ruby-subtle: rgba(224, 17, 95, 0.15);
+  --gold: #ffd700;
+  --gold-light: #ffe44d;
+  --gold-dark: #b8960f;
+  --gold-glow: rgba(255, 215, 0, 0.3);
+  --text-primary: #f0f0f5;
+  --text-secondary: #b0b0c8;
+  --text-muted: #6a6a8a;
+  --border-color: rgba(224, 17, 95, 0.2);
+  --border-gold: rgba(255, 215, 0, 0.3);
+  --font-display: 'Cinzel', serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --font-body: 'Cormorant Garamond', serif;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+  --spacing-2xl: 8rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deepest);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--ruby-light); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--gold); }
+img { max-width: 100%; }
+::selection { background: var(--ruby); color: white; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deepest); }
+::-webkit-scrollbar-thumb { background: var(--ruby-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ruby); }
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-lg); }
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+}
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.section-header .gem-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) auto;
+  width: 200px;
+}
+.section-header .gem-divider::before,
+.section-header .gem-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+}
+.section-header .gem-divider .gem-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--ruby);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  animation: gemPulse 2s ease-in-out infinite;
+}
+@keyframes gemPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+.section-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  font-style: italic;
+  font-family: var(--font-body);
+}
+.section { padding: var(--spacing-2xl) 0; position: relative; }
+
+/* ===== NOISE OVERLAY ===== */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ===== STICKY NAV ===== */
+.nav-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(224, 17, 95, 0.15);
+  padding: 0 var(--spacing-lg);
+  transition: var(--transition);
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+.nav-bar.scrolled {
+  background: rgba(5, 5, 10, 0.95);
+  border-bottom-color: rgba(224, 17, 95, 0.3);
+}
+.nav-bar .nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.nav-bar .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ruby-light);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-bar .nav-logo .nav-gem {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+.nav-links a {
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--ruby-light);
+  background: rgba(224, 17, 95, 0.1);
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-deepest);
+  padding: 120px var(--spacing-lg) 60px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(224, 17, 95, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 40%),
+              radial-gradient(ellipse at 50% 80%, rgba(224, 17, 95, 0.05) 0%, transparent 40%);
+  animation: heroAmbient 20s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes heroAmbient {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(2%, -2%) rotate(1deg); }
+  66% { transform: translate(-1%, 1%) rotate(-1deg); }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+}
+
+/* Floating gems */
+.floating-gems {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.floating-gem {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: var(--ruby);
+  opacity: 0.1;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  animation: floatGem linear infinite;
+}
+.floating-gem:nth-child(1) { width: 20px; height: 20px; left: 10%; animation-duration: 12s; animation-delay: 0s; background: var(--ruby-light); }
+.floating-gem:nth-child(2) { width: 35px; height: 35px; left: 25%; animation-duration: 15s; animation-delay: 1s; }
+.floating-gem:nth-child(3) { width: 15px; height: 15px; left: 45%; animation-duration: 10s; animation-delay: 2s; background: var(--gold); }
+.floating-gem:nth-child(4) { width: 25px; height: 25px; left: 65%; animation-duration: 14s; animation-delay: 0.5s; }
+.floating-gem:nth-child(5) { width: 18px; height: 18px; left: 85%; animation-duration: 11s; animation-delay: 3s; background: var(--ruby-light); }
+.floating-gem:nth-child(6) { width: 40px; height: 40px; left: 50%; animation-duration: 18s; animation-delay: 1.5s; opacity: 0.05; }
+.floating-gem:nth-child(7) { width: 22px; height: 22px; left: 5%; animation-duration: 13s; animation-delay: 2.5s; background: var(--gold); }
+.floating-gem:nth-child(8) { width: 28px; height: 28px; left: 75%; animation-duration: 16s; animation-delay: 0.8s; }
+@keyframes floatGem {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.15; }
+  90% { opacity: 0.15; }
+  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Hero Gem Logo */
+.hero-gem {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+  animation: gemFloat 3s ease-in-out infinite;
+}
+@keyframes gemFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.hero-gem .gem-shape {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--ruby-dark), var(--ruby), var(--ruby-light), var(--ruby));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  position: relative;
+  box-shadow: 0 0 60px var(--ruby-glow), 0 0 120px rgba(224, 17, 95, 0.15);
+  animation: gemGlow 3s ease-in-out infinite;
+}
+@keyframes gemGlow {
+  0%, 100% { box-shadow: 0 0 60px var(--ruby-glow), 0 0 120px rgba(224, 17, 95, 0.15); }
+  50% { box-shadow: 0 0 80px var(--ruby-glow), 0 0 160px rgba(224, 17, 95, 0.25); }
+}
+.hero-gem .gem-shape::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 30%;
+  height: 20%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  transform: rotate(45deg);
+}
+.hero-gem .gem-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 900;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(180deg, #fff 0%, var(--ruby-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: var(--gold);
+  letter-spacing: 12px;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-lg);
+  min-height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero .tagline .cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.2em;
+  background: var(--gold);
+  margin-left: 4px;
+  animation: cursorBlink 0.8s step-end infinite;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.hero .hero-sub {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  font-style: italic;
+  font-family: var(--font-body);
+}
+.hero .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+.hero .btn-primary {
+  display: inline-block;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.hero .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px var(--ruby-glow);
+}
+.hero .btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg) translateX(-100%);
+  transition: 0.5s;
+}
+.hero .btn-primary:hover::after {
+  transform: rotate(45deg) translateX(100%);
+}
+.hero .btn-outline {
+  display: inline-block;
+  padding: 16px 40px;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.hero .btn-outline:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px var(--gold-glow);
+}
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: bounceDown 2s ease-in-out infinite;
+  z-index: 2;
+}
+.scroll-indicator .scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--ruby);
+  border-bottom: 2px solid var(--ruby);
+  transform: rotate(45deg);
+  animation: scrollArrow 2s ease-in-out infinite;
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+@keyframes scrollArrow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ===== MANIFESTO SECTION ===== */
+.manifesto {
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+.manifesto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+}
+.manifesto-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.manifesto-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 20%; right: 20%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+  border-radius: 0 0 50% 50%;
+}
+.manifesto-card .manifesto-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  background: var(--ruby-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--ruby-light);
+  margin-bottom: var(--spacing-md);
+}
+.manifesto-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 2px;
+}
+.manifesto-card p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-body);
+}
+.manifesto-card .ruby-oath {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, rgba(224, 17, 95, 0.08), rgba(255, 215, 0, 0.05));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--ruby);
+  position: relative;
+}
+.manifesto-card .ruby-oath::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 4rem;
+  color: var(--ruby);
+  opacity: 0.3;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+.manifesto-card .ruby-oath h4 {
+  font-family: var(--font-display);
+  color: var(--ruby-light);
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-sm);
+}
+.manifesto-card .ruby-oath p {
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 0;
+  color: var(--text-primary);
+}
+
+/* ===== VALUES SECTION ===== */
+.values {
+  background: var(--bg-primary);
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.value-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
+  min-height: 280px;
+}
+.value-card:hover {
+  border-color: var(--ruby);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(224, 17, 95, 0.15);
+}
+.value-card .value-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  display: block;
+  transition: var(--transition);
+}
+.value-card:hover .value-icon {
+  transform: scale(1.2);
+}
+.value-card .value-number {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--ruby);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-sm);
+}
+.value-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.value-card .value-fr {
+  color: var(--gold);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-bottom: var(--spacing-md);
+}
+.value-card .value-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+.value-card.expanded .value-desc {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: var(--spacing-md);
+}
+.value-card .value-expand-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: var(--spacing-md);
+  transition: var(--transition);
+}
+.value-card:hover .value-expand-hint {
+  color: var(--ruby-light);
+}
+.value-card .value-gem {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--ruby);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  margin-right: 6px;
+}
+
+/* ===== RUBY CODE SECTION ===== */
+.game-section {
+  background: linear-gradient(180deg, var(--bg-secondary), var(--bg-deepest));
+  position: relative;
+}
+.game-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+}
+.game-container {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: var(--spacing-lg);
+}
+.game-stat {
+  font-family: var(--font-display);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+.game-stat span {
+  display: block;
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-top: 4px;
+  font-family: var(--font-code);
+}
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto var(--spacing-lg);
+}
+.game-card {
+  aspect-ratio: 1;
+  background: transparent;
+  perspective: 800px;
+  cursor: pointer;
+}
+.game-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.game-card.flipped .game-card-inner,
+.game-card.matched .game-card-inner {
+  transform: rotateY(180deg);
+}
+.game-card.matched .game-card-inner {
+  animation: matchPulse 0.6s ease;
+}
+@keyframes matchPulse {
+  0% { transform: rotateY(180deg) scale(1); }
+  50% { transform: rotateY(180deg) scale(1.08); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+.game-card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  border: 2px solid var(--border-color);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.game-card-back {
+  background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+  border-color: var(--ruby-dark);
+}
+.game-card-back::after {
+  content: '💎';
+  font-size: 2rem;
+  opacity: 0.5;
+}
+.game-card-back:hover {
+  border-color: var(--ruby);
+  box-shadow: 0 0 20px var(--ruby-glow);
+}
+.game-card-front {
+  background: linear-gradient(135deg, #1a1a2e, #252540);
+  transform: rotateY(180deg);
+  border-color: var(--gold-dark);
+}
+.game-card.matched .game-card-front {
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  background: linear-gradient(135deg, #1a2a1a, #252540);
+}
+.game-card.disabled {
+  pointer-events: none;
+}
+.game-btn {
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-dark));
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+}
+.game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--ruby-glow);
+}
+.game-win {
+  display: none;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid var(--gold-dark);
+  border-radius: var(--radius-lg);
+}
+.game-win.show {
+  display: block;
+  animation: fadeInUp 0.6s ease;
+}
+.game-win h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+.game-win p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* ===== MEMBERS SECTION ===== */
+.members {
+  background: var(--bg-primary);
+}
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.member-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.member-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+.member-card:hover::before { transform: scaleX(1); }
+.member-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(224, 17, 95, 0.15);
+  border-color: var(--ruby);
+}
+.member-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 auto var(--spacing-md);
+  position: relative;
+  border: 2px solid var(--ruby-dark);
+  transition: var(--transition);
+}
+.member-card:hover .member-avatar {
+  border-color: var(--gold);
+  box-shadow: 0 0 30px var(--ruby-glow);
+}
+.member-card .member-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.member-card .member-role {
+  font-size: 0.8rem;
+  color: var(--ruby-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: var(--font-display);
+  margin-bottom: var(--spacing-sm);
+}
+.member-card .member-joined {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.member-card .member-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--ruby-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-top: var(--spacing-sm);
+}
+
+/* ===== RANKING / POINTS ===== */
+.all-members {
+  background: linear-gradient(180deg, var(--bg-secondary), var(--bg-deepest));
+  position: relative;
+}
+.all-members::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+}
+.ruby-wall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.wall-item {
+  background: linear-gradient(135deg, rgba(224, 17, 95, 0.08), rgba(224, 17, 95, 0.02));
+  border: 1px solid rgba(224, 17, 95, 0.15);
+  border-radius: var(--radius-md);
+  padding: 14px 22px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  transition: var(--transition);
+  position: relative;
+  cursor: default;
+}
+.wall-item::before {
+  content: '💎';
+  font-size: 0.7rem;
+  margin-right: 6px;
+  opacity: 0.6;
+}
+.wall-item:hover {
+  background: linear-gradient(135deg, rgba(224, 17, 95, 0.2), rgba(255, 215, 0, 0.08));
+  border-color: var(--ruby);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(224, 17, 95, 0.15);
+}
+.wall-item:hover::before {
+  opacity: 1;
+}
+
+
+/* ===== TIMELINE ===== */
+.timeline-section {
+  background: var(--bg-primary);
+  position: relative;
+}
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent, var(--ruby), var(--gold), var(--ruby), transparent);
+}
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.6s ease;
+}
+.timeline-item.visible { opacity: 1; transform: translateX(0); }
+.timeline-item:nth-child(even) {
+  margin-left: 50%;
+  transform: translateX(30px);
+}
+.timeline-item:nth-child(even).visible { transform: translateX(0); }
+.timeline-item .tl-marker {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--ruby);
+  border: 3px solid var(--bg-primary);
+  border-radius: 50%;
+  top: var(--spacing-xl);
+  right: -8px;
+  z-index: 2;
+  box-shadow: 0 0 15px var(--ruby-glow);
+}
+.timeline-item:nth-child(even) .tl-marker {
+  left: -8px;
+  right: auto;
+}
+.timeline-item .tl-year {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.timeline-item .tl-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-sm);
+}
+.timeline-item .tl-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+.timeline-item .tl-desc:hover { color: var(--text-secondary); }
+.timeline-item .tl-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+.timeline-item .tl-detail.open {
+  max-height: 200px;
+  margin-top: var(--spacing-sm);
+}
+
+/* ===== VAULT SECTION ===== */
+.vault-section {
+  background: linear-gradient(180deg, var(--bg-secondary), var(--bg-deepest));
+  position: relative;
+}
+.vault-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+}
+.vault-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.vault-door {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto var(--spacing-lg);
+  background: radial-gradient(circle at 40% 35%, #2a1a1a, #0a0a0f);
+  border: 3px solid var(--ruby-dark);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  box-shadow: 0 0 40px rgba(224, 17, 95, 0.1), inset 0 0 60px rgba(0,0,0,0.5);
+}
+.vault-door:hover {
+  border-color: var(--ruby-light);
+  box-shadow: 0 0 60px rgba(224, 17, 95, 0.2), inset 0 0 60px rgba(0,0,0,0.5);
+}
+.vault-door .vault-lock {
+  font-size: 3rem;
+  transition: var(--transition);
+}
+.vault-door:hover .vault-lock { transform: scale(1.1); }
+.vault-door .vault-ring {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border: 2px solid rgba(224, 17, 95, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.vault-door .vault-ring-inner {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.vault-hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-lg);
+}
+.vault-code-input {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+.vault-digit {
+  width: 50px;
+  height: 60px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+  outline: none;
+}
+.vault-digit:focus {
+  border-color: var(--ruby);
+  box-shadow: 0 0 20px var(--ruby-glow);
+}
+.vault-digit.filled {
+  border-color: var(--gold);
+  background: rgba(255,215,0,0.05);
+}
+.vault-unlock-btn {
+  padding: 12px 40px;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.vault-unlock-btn:hover {
+  box-shadow: 0 5px 30px var(--ruby-glow);
+  transform: translateY(-3px);
+}
+.vault-unlock-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.vault-contents {
+  display: none;
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: rgba(224, 17, 95, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  animation: vaultReveal 0.6s ease;
+}
+.vault-contents.open { display: block; }
+@keyframes vaultReveal {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.vault-contents h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.4rem;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 2px;
+}
+.vault-contents p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-body);
+}
+.vault-easter-egg {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, var(--ruby-dark), var(--ruby));
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+  animation: eggPulse 2s ease-in-out infinite;
+}
+@keyframes eggPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--ruby-glow); }
+  50% { box-shadow: 0 0 30px var(--ruby-glow), 0 0 60px rgba(224, 17, 95, 0.15); }
+}
+.vault-easter-egg:hover { transform: scale(1.05); }
+
+
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-deepest);
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
+  position: relative;
+}
+.footer-credo {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-xl);
+}
+.footer-credo .credo-symbol {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+.footer-credo .credo-text {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+  line-height: 1.8;
+  font-style: italic;
+}
+.footer-credo .credo-text .highlight {
+  color: var(--ruby-light);
+}
+.footer-credo .credo-text .highlight-gold {
+  color: var(--gold);
+}
+.footer-divider {
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ruby), transparent);
+  margin: var(--spacing-lg) auto;
+}
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+}
+.footer-bottom .footer-gem {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  margin-bottom: var(--spacing-sm);
+}
+.footer-bottom .footer-motto {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.footer-bottom .footer-motto .ruby-word {
+  color: var(--ruby-light);
+}
+.footer-bottom .footer-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-bottom .footer-links a {
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.footer-bottom .footer-links a:hover { color: var(--ruby-light); }
+.footer-bottom .footer-copy {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: var(--spacing-md);
+}
+
+/* ===== SCROLL TO TOP ===== */
+.scroll-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-dark));
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 25px var(--ruby-glow);
+  pointer-events: none;
+}
+.scroll-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 35px var(--ruby-glow);
+}
+
+/* ===== AI CHAT WIDGET ===== */
+.chat-bubble {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-dark));
+  border: 2px solid var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  z-index: 1000;
+  box-shadow: 0 4px 20px var(--ruby-glow);
+  transition: all 0.3s ease;
+}
+.chat-bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px var(--ruby-glow);
+}
+.chat-bubble .chat-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--bg-deepest);
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+}
+
+.chat-panel {
+  position: fixed;
+  bottom: 96px;
+  left: 30px;
+  width: 340px;
+  max-height: 460px;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(224, 17, 95, 0.3);
+  border-radius: 16px;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  overflow: hidden;
+  animation: chatSlideIn 0.3s ease;
+}
+.chat-panel.open {
+  display: flex;
+}
+@keyframes chatSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.chat-panel .chat-header {
+  background: linear-gradient(135deg, var(--ruby-dark), var(--ruby));
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chat-panel .chat-header .chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+.chat-panel .chat-header .chat-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: white;
+  font-weight: 600;
+}
+.chat-panel .chat-header .chat-close {
+  cursor: pointer;
+  color: rgba(255,255,255,0.6);
+  font-size: 1.1rem;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+.chat-panel .chat-header .chat-close:hover {
+  color: white;
+}
+
+.chat-panel .chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  scroll-behavior: smooth;
+}
+.chat-panel .chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+.chat-panel .chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-panel .chat-messages::-webkit-scrollbar-thumb {
+  background: var(--ruby);
+  border-radius: 2px;
+}
+
+.chat-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-family: var(--font-body);
+  animation: msgIn 0.25s ease;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chat-msg.bot {
+  align-self: flex-start;
+  background: var(--bg-card);
+  border: 1px solid rgba(224, 17, 95, 0.15);
+  color: var(--text-secondary);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-dark));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg .chat-msg-time {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  display: block;
+  text-align: right;
+}
+.chat-msg.bot .chat-msg-time {
+  text-align: left;
+}
+.chat-msg code {
+  background: rgba(224, 17, 95, 0.15);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ruby-light);
+}
+.chat-msg pre {
+  margin: 6px 0;
+  overflow-x: auto;
+}
+.chat-msg pre code {
+  display: block;
+  padding: 10px 12px;
+  background: var(--bg-deepest);
+  border: 1px solid rgba(224, 17, 95, 0.2);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.chat-msg a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.chat-msg a:hover {
+  color: var(--gold-light);
+}
+.chat-msg h4 {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--gold);
+  margin: 8px 0 4px;
+}
+.chat-msg ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+.chat-msg li {
+  margin: 2px 0;
+  list-style-type: disc;
+}
+.chat-msg .chat-typing {
+  display: inline-flex;
+  gap: 4px;
+}
+.chat-msg .chat-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: typingDot 1.4s infinite;
+}
+.chat-msg .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-msg .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); }
+}
+
+.chat-panel .chat-input-area {
+  display: flex;
+  padding: 10px 12px;
+  gap: 8px;
+  border-top: 1px solid rgba(224, 17, 95, 0.15);
+  background: var(--bg-deepest);
+}
+.chat-panel .chat-input-area input {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid rgba(224, 17, 95, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.chat-panel .chat-input-area input:focus {
+  border-color: var(--ruby);
+}
+.chat-panel .chat-input-area input::placeholder {
+  color: var(--text-muted);
+}
+.chat-panel .chat-input-area .chat-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ruby), var(--ruby-dark));
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.chat-panel .chat-input-area .chat-send:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--ruby-glow);
+}
+.chat-panel .chat-input-area .chat-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .chat-panel {
+    left: 10px;
+    right: 10px;
+    bottom: 86px;
+    width: auto;
+    max-height: 400px;
+  }
+  .chat-bubble {
+    left: 16px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===== PARTICLES CANVAS ===== */
+#particles-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(5, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .nav-toggle { display: block; }
+  .timeline::before { left: 20px; }
+  .timeline-item,
+  .timeline-item:nth-child(even) {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 50px;
+    padding-right: var(--spacing-lg);
+  }
+  .timeline-item .tl-marker,
+  .timeline-item:nth-child(even) .tl-marker {
+    left: 12px;
+    right: auto;
+  }
+  .game-grid { grid-template-columns: repeat(3, 1fr); max-width: 380px; }
+  .game-info { gap: 20px; }
+  .hero .hero-cta { flex-direction: column; }
+  .vault-digit { width: 40px; height: 50px; font-size: 1.2rem; }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 0 var(--spacing-md); }
+  .section { padding: var(--spacing-xl) 0; }
+  .manifesto-card { padding: var(--spacing-lg); }
+  .members-grid { grid-template-columns: repeat(2, 1fr); }
+  .ruby-wall { gap: 8px; }
+  .wall-item { padding: 10px 14px; font-size: 0.8rem; }
+  .game-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 300px; }
+  .game-info { gap: 16px; flex-wrap: wrap; }
+  .game-stat { font-size: 0.75rem; }
+  .game-stat span { font-size: 1.3rem; }
+  .hero-gem { width: 80px; height: 80px; }
+  .hero h1 { letter-spacing: 4px; }
+  .hero .tagline { letter-spacing: 6px; }
+}
+
+/* ===== RANDOM GLITCH SPARKS ===== */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  z-index: 9998;
+  animation: sparkle 0.8s ease forwards;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="nav-bar" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <span class="nav-gem"></span>
+      RUBY
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#manifesto">Manifeste</a></li>
+      <li><a href="#values">Valeurs</a></li>
+      <li><a href="#game">Jeu</a></li>
+      <li><a href="#members">Membres</a></li>
+      <li><a href="#all-members">Équipage</a></li>
+
+      <li><a href="#timeline">Histoire</a></li>
+      <li><a href="#vault">Archives</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== 1. HERO SECTION ===== -->
+<section class="hero" id="hero">
+  <canvas id="particles-canvas"></canvas>
+  <div class="floating-gems">
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+    <div class="floating-gem"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-gem">
+      <div class="gem-shape"></div>
+    </div>
+    <h1>Faction Ruby</h1>
+    <div class="tagline" id="tagline">
+      <span id="taglineText"></span><span class="cursor"></span>
+    </div>
+    <p class="hero-sub">Forgée dans la confiance, unie par la loyauté, brillante de fiabilité.</p>
+    <div class="hero-cta">
+      <a href="#manifesto" class="btn-primary">Découvrir</a>
+        <a href="#all-members" class="btn-outline">★ L'Équipage</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Défiler</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ===== 2. MANIFESTO ===== -->
+<section class="section manifesto" id="manifesto">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Le Manifeste</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>La parole fondatrice de la Faction Ruby</p>
+    </div>
+    <div class="manifesto-card reveal reveal-delay-1">
+      <span class="manifesto-badge">📜 Acta Rubiae</span>
+      <h3>Loyauté &amp; Fiabilité</h3>
+      <p>
+        Dans un monde de code éphémère et de promesses fragiles, la <strong>Faction Ruby</strong> se dresse comme un bastion de constance. Nous croyons que la véritable force ne réside pas dans la vitesse, mais dans la <strong>fiabilité</strong>. Que la puissance véritable ne vient pas de l'éclat, mais de la <strong>loyauté</strong> inébranlable.
+      </p>
+      <p>
+        Comme le rubis — l'une des pierres les plus dures et les plus précieuses — nous résistons à la pression, nous brillons dans l'obscurité, et nous restons intègres face à l'adversité. Chaque membre est une facette de ce cristal parfait, chaque action une réfraction de notre lumière collective.
+      </p>
+      <p>
+        Notre code est notre contrat. Notre parole est notre lien. Notre faction est notre famille.
+      </p>
+      <div class="ruby-oath">
+        <h4>⚔ Le Serment Ruby</h4>
+        <p>
+          "Je jure par le rubis et par le feu qui l'a forgé : ma loyauté sera inébranlable, ma fiabilité absolue. Je serai le roc sur lequel mes camarades peuvent compter, la lumière qui guide dans l'obscurité. Un pour tous, tous pour un — jusqu'au dernier commit."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. CORE VALUES ===== -->
+<section class="section values" id="values">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Nos Valeurs</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>Les piliers qui nous définissent</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal reveal-delay-1" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR I</span>
+        <span class="value-icon">🛡️</span>
+        <h3>Loyauté</h3>
+        <span class="value-fr">Loyauté</span>
+        <div class="value-desc">
+          La loyauté est notre fondation. Nous restons fidèles à nos engagements, à nos camarades et à notre code. Dans un monde d'intérêts changeants, nous sommes constants. Un membre Ruby ne trahit jamais sa parole.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+      <div class="value-card reveal reveal-delay-2" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR II</span>
+        <span class="value-icon">⚙️</span>
+        <h3>Fiabilité</h3>
+        <span class="value-fr">Fiabilité</span>
+        <div class="value-desc">
+          Être fiable, c'est être prévisible dans l'excellence. Chaque membre Ruby tient ses promesses, livre à temps, et produit un travail sur lequel on peut compter — comme le rubis, inaltérable et constant.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+      <div class="value-card reveal reveal-delay-3" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR III</span>
+        <span class="value-icon">⭐</span>
+        <h3>Excellence</h3>
+        <span class="value-fr">Excellence</span>
+        <div class="value-desc">
+          Nous ne visons pas la médiocrité. Chaque ligne de code, chaque décision, chaque interaction est une œuvre d'art. La quête de l'excellence est un voyage sans fin, et nous marchons ensemble.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+      <div class="value-card reveal reveal-delay-1" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR IV</span>
+        <span class="value-icon">💎</span>
+        <h3>Intégrité</h3>
+        <span class="value-fr">Intégrité</span>
+        <div class="value-desc">
+          Faire ce qui est juste, même quand personne ne regarde. Notre intégrité est notre marque de fabrique. Nous sommes transparents, honnêtes, et éthiques dans toutes nos actions.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+      <div class="value-card reveal reveal-delay-2" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR V</span>
+        <span class="value-icon">🔥</span>
+        <h3>Courage</h3>
+        <span class="value-fr">Courage</span>
+        <div class="value-desc">
+          Oser innover, défendre ses convictions, protéger ses camarades. Le courage Ruby n'est pas l'absence de peur, mais la détermination à agir malgré elle. Nous prenons des risques calculés.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+      <div class="value-card reveal reveal-delay-3" onclick="this.classList.toggle('expanded')">
+        <span class="value-number">VALEUR VI</span>
+        <span class="value-icon">🤝</span>
+        <h3>Fraternité</h3>
+        <span class="value-fr">Fraternité</span>
+        <div class="value-desc">
+          La faction est une famille. Nous nous soutenons mutuellement, nous célébrons nos succès ensemble, et nous nous relevons après nos échecs. Seul on va plus vite, ensemble on va plus loin.
+        </div>
+        <div class="value-expand-hint"><span class="value-gem"></span> cliquer pour lire</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. INTERACTIVE GAME ===== -->
+<section class="section game-section" id="game">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Jeu de Mémoire</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>Testez votre mémoire — trouvez toutes les paires de gemmes</p>
+    </div>
+    <div class="game-container reveal reveal-delay-1">
+      <div class="game-info">
+        <div class="game-stat">Coups<span id="gameMoves">0</span></div>
+        <div class="game-stat">Temps<span id="gameTime">0s</span></div>
+        <div class="game-stat">Paires<span id="gamePairs">0 / 6</span></div>
+      </div>
+      <div class="game-grid" id="gameGrid"></div>
+      <button class="game-btn" id="gameRestart">⟳ Nouvelle Partie</button>
+      <div class="game-win" id="gameWin">
+        <h3>🎉 Félicitations !</h3>
+        <p id="gameWinMsg">Tu as trouvé toutes les paires !</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. MEMBERS ===== -->
+<section class="section members" id="members">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Les Rubis</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>Nos valeureux membres</p>
+    </div>
+    <div class="members-grid">
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #e0115f, #8b0040);">DD</div>
+        <div class="member-name">David Ducreux</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #1a5276, #0e2f44);">DM</div>
+        <div class="member-name">Maxime Defavero</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #7d3c98, #4a235a);">DMa</div>
+        <div class="member-name">Mathis Dura</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #c0392b, #641e16);">FI</div>
+        <div class="member-name">Isaac Feraut-Louis</div>
+      </div>
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #d4ac0d, #7d6608);">GF</div>
+        <div class="member-name">Gabriel Fabre</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #2e4053, #1a252f);">GA</div>
+        <div class="member-name">Alexandre Ginter</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #922b21, #512e5f);">GN</div>
+        <div class="member-name">Noé Groult</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #1a5276, #0b5345);">HM</div>
+        <div class="member-name">Hamza Mirinioui</div>
+      </div>
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #6c3483, #1f0b36);">LS</div>
+        <div class="member-name">Simo Lahlou</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #b7950b, #5b4a02);">LM</div>
+        <div class="member-name">Léo Mereuze</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #148f77, #0b5345);">LD</div>
+        <div class="member-name">Lisa Durand</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #b03a2e, #6b1a12);">LC</div>
+        <div class="member-name">Tom Lopez-Coute</div>
+      </div>
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #2c3e50, #1a252f);">LN</div>
+        <div class="member-name">Louise Nosbé</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #a569bd, #4a235a);">MA</div>
+        <div class="member-name">Amaury Martin</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #e67e22, #7e5100);">NC</div>
+        <div class="member-name">Nolan Courtin</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #16a085, #0b5345);">PL</div>
+        <div class="member-name">Leandro Pissarra</div>
+      </div>
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #943126, #511a0d);">AS</div>
+        <div class="member-name">Alexis Salame</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #2e86c1, #1a5276);">CP</div>
+        <div class="member-name">Corentin Piriou</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #cb4335, #6e1d12);">EB</div>
+        <div class="member-name">Eliott Bougherara</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #5b2c6f, #2e0f3e);">EBr</div>
+        <div class="member-name">Ethan Bravo-Mathis</div>
+      </div>
+      <div class="member-card reveal reveal-delay-1">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #d35400, #7a3000);">KF</div>
+        <div class="member-name">Kenzo Ferrero</div>
+      </div>
+      <div class="member-card reveal reveal-delay-2">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #2874a6, #154360);">KP</div>
+        <div class="member-name">Kerian Kennadi Pradier</div>
+      </div>
+      <div class="member-card reveal reveal-delay-3">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #1a5276, #0b5345);">PLe</div>
+        <div class="member-name">Leon Pezet</div>
+      </div>
+      <div class="member-card reveal reveal-delay-4">
+        <div class="member-avatar" style="background: linear-gradient(135deg, #515a5a, #1c2833);">SS</div>
+        <div class="member-name">Solal Silberbusch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. ALL MEMBERS WALL ===== -->
+<section class="section all-members" id="all-members">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Tous les Rubis</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>24 membres · Une seule famille · Aucune hiérarchie</p>
+    </div>
+    <div class="ruby-wall reveal reveal-delay-1">
+      <div class="wall-item">David Ducreux</div>
+      <div class="wall-item">Maxime Defavero</div>
+      <div class="wall-item">Mathis Dura</div>
+      <div class="wall-item">Isaac Feraut-Louis</div>
+      <div class="wall-item">Gabriel Fabre</div>
+      <div class="wall-item">Alexandre Ginter</div>
+      <div class="wall-item">Noé Groult</div>
+      <div class="wall-item">Hamza Mirinioui</div>
+      <div class="wall-item">Simo Lahlou</div>
+      <div class="wall-item">Léo Mereuze</div>
+      <div class="wall-item">Lisa Durand</div>
+      <div class="wall-item">Tom Lopez-Coute</div>
+      <div class="wall-item">Louise Nosbé</div>
+      <div class="wall-item">Amaury Martin</div>
+      <div class="wall-item">Nolan Courtin</div>
+      <div class="wall-item">Leandro Pissarra</div>
+      <div class="wall-item">Alexis Salame</div>
+      <div class="wall-item">Corentin Piriou</div>
+      <div class="wall-item">Eliott Bougherara</div>
+      <div class="wall-item">Ethan Bravo-Mathis</div>
+      <div class="wall-item">Kenzo Ferrero</div>
+      <div class="wall-item">Kerian Kennadi Pradier</div>
+      <div class="wall-item">Leon Pezet</div>
+      <div class="wall-item">Solal Silberbusch</div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ===== 9. TIMELINE ===== -->
+<section class="section timeline-section" id="timeline">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Notre Parcours</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>Une semaine dédiée à la montée en compétence</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="tl-marker"></div>
+        <div class="tl-year">15 Juin</div>
+        <div class="tl-title">🔧 Code Site</div>
+        <div class="tl-desc" onclick="toggleTimeline(this)">
+          Création et déploiement du site web — défi commun aux 4 factions.
+          <div class="tl-detail">Jour 1 — Chaque faction (Ruby, LUA, Rust, JavaScript) conçoit et développe son site one-page. Objectif : représenter sa faction avec fierté et remporter le vote général. Les Rubis misent sur la loyauté, la fiabilité et un design percutant.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-marker"></div>
+        <div class="tl-year">16 Juin</div>
+        <div class="tl-title">🔐 Cyber</div>
+        <div class="tl-desc" onclick="toggleTimeline(this)">
+          Sécurisation des infrastructures — défi commun aux 4 factions.
+          <div class="tl-detail">Jour 2 — Les 4 factions s'initient aux bonnes pratiques de cybersécurité : gestion des accès, chiffrement, protection des données. Chaque faction prouve que la fiabilité passe aussi par la sécurité. Les Rubis se distinguent par leur rigueur.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-marker"></div>
+        <div class="tl-year">17 Juin</div>
+        <div class="tl-title">🎮 Codingames</div>
+        <div class="tl-desc" onclick="toggleTimeline(this)">
+          Défis algorithmiques — compétition inter-factions.
+          <div class="tl-detail">Jour 3 — Les 4 factions s'affrontent sur des coding challenges : algorithmique, logique et optimisation. Ruby, LUA, Rust et JavaScript rivalisent de créativité et de rapidité. Les Rubis misent sur la collaboration et l'entraide pour briller.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-marker"></div>
+        <div class="tl-year">18 Juin</div>
+        <div class="tl-title">🐧 Shell Linux</div>
+        <div class="tl-desc" onclick="toggleTimeline(this)">
+          Prise en main du shell Linux — défi commun aux 4 factions.
+          <div class="tl-detail">Jour 4 — Les 4 factions explorent le terminal : navigation, scripts bash, automatisation, pipes et administration système. Rubis, Luaïstes, Rustéens et JavaScripteurs manient la ligne de commande avec une égale détermination.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-marker"></div>
+        <div class="tl-year">19 Juin</div>
+        <div class="tl-title">🏡 Télétravail</div>
+        <div class="tl-desc" onclick="toggleTimeline(this)">
+          Organisation et productivité en télétravail — clôture inter-factions.
+          <div class="tl-detail">Jour 5 — Les 4 factions se réunissent pour la dernière journée consacrée au télétravail : gestion du temps, outils de collaboration, communication asynchrone et équilibre vie pro/perso. La semaine s'achève sur une note conviviale entre Ruby, LUA, Rust et JavaScript.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10. THE VAULT ===== -->
+<section class="section vault-section" id="vault">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Les Archives Secrètes</h2>
+      <div class="gem-divider">
+        <span class="gem-dot"></span>
+      </div>
+      <p>Le coffre aux trésors de la faction</p>
+    </div>
+    <div class="vault-container reveal reveal-delay-1">
+      <div class="vault-door" id="vaultDoor">
+        <div class="vault-ring"></div>
+        <div class="vault-ring-inner"></div>
+        <span class="vault-lock" id="vaultLockIcon">🔒</span>
+      </div>
+      <p class="vault-hint">Entrez le code à 4 chiffres pour ouvrir le coffre</p>
+      <div class="vault-code-input" id="vaultCodeInput">
+        <input type="text" class="vault-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input type="text" class="vault-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input type="text" class="vault-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input type="text" class="vault-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      </div>
+      <button class="vault-unlock-btn" id="vaultUnlockBtn">🔓 Déverrouiller</button>
+      <div class="vault-contents" id="vaultContents">
+        <h3>🗝️ Coffre Déverrouillé</h3>
+        <p>
+          Bienvenue dans les archives secrètes de la Faction Ruby. Tu as prouvé ta détermination.
+          Voici un message des fondateurs :
+        </p>
+        <blockquote style="border-left: 2px solid var(--ruby); padding-left: 16px; margin: 16px 0; color: var(--text-secondary); font-style: italic;">
+          "Le rubis ne brille que sous pression. Souviens-toi : la vraie force est invisible. Elle réside dans la confiance que tu inspires et la loyauté que tu offres."
+        </blockquote>
+        <p>🔮 <strong>Easter Egg trouvé :</strong> La devise secrète !</p>
+        <span class="vault-easter-egg" id="easterEgg">⏎ ruby_puts "Loyauté & Fiabilité"</span>
+        <p style="margin-top: 16px; color: var(--gold); font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 3px;">
+          ⚡ Code d'accès : RUBY
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ===== 12. FOOTER ===== -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-credo reveal">
+      <span class="credo-symbol">💎</span>
+      <p class="credo-text">
+        "Que votre <span class="highlight">loyauté</span> soit aussi dure que le rubis,<br>
+        et votre <span class="highlight">fiabilité</span> aussi brillante que l'or.<br>
+        Unis dans le code, forts dans la <span class="highlight-gold">confiance</span>."
+      </p>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom reveal">
+      <span class="footer-gem"></span>
+      <div class="footer-motto">
+        <span class="ruby-word">Ruby</span> — Fièrement
+      </div>
+      <div class="footer-links">
+        <a href="#manifesto">Manifeste</a>
+        <a href="#values">Valeurs</a>
+        <a href="#game">Jeu</a>
+        <a href="#members">Membres</a>
+        <a href="#vault">Archives</a>
+      </div>
+      <p class="footer-copy">
+        Faction Ruby · Fondée en MMX · <span style="color: var(--ruby-light);">Loyauté &amp; Fiabilité</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== AI CHAT WIDGET ===== -->
+<div class="chat-bubble" id="chatBubble" aria-label="Ouvrir le chat Ruby">
+  💎
+  <span class="chat-badge" id="chatBadge">1</span>
+</div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-avatar">💎</div>
+    <div class="chat-title">Ruby IA</div>
+    <button class="chat-close" id="chatClose">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Pose ta question..." autocomplete="off">
+    <button class="chat-send" id="chatSend">➤</button>
+  </div>
+</div>
+
+<!-- ===== SCROLL TO TOP ===== -->
+<button class="scroll-top" id="scrollTop" aria-label="Retour en haut">↑</button>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+(function() {
+  'use strict';
+
+  /* =========================================
+     CONFIG
+     ========================================= */
+  const VAULT_CODE = '1312'; // 13 pour Ruby (lettre R = 18, mais 13 = M... utilisons 1312)
+
+  /* =========================================
+     TYPEWRITER EFFECT
+     ========================================= */
+  function typeWriter(el, text, speed, callback) {
+    el.textContent = '';
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+
+  const taglineEl = document.getElementById('taglineText');
+  if (taglineEl) {
+    typeWriter(taglineEl, 'Loyauté  &  Fiabilité', 60);
+  }
+
+  /* =========================================
+     STICKY NAV SCROLL EFFECT
+     ========================================= */
+  const navbar = document.getElementById('navbar');
+
+  /* =========================================
+     MOBILE NAV TOGGLE
+     ========================================= */
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  if (navToggle) {
+    navToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+    // Close on link click
+    navLinks.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+      });
+    });
+  }
+
+  /* =========================================
+     INTERSECTION OBSERVER FOR REVEALS
+     ========================================= */
+  const revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Wall items highlight on reveal
+        const wallItems = entry.target.querySelectorAll('.wall-item');
+        wallItems.forEach(function(item, idx) {
+          item.style.transitionDelay = (idx * 0.03) + 's';
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  /* =========================================
+     MEMORY GAME
+     ========================================= */
+  (function() {
+    const icons = ['💎', '🔴', '🛡️', '👑', '🔥', '⚔️'];
+    let cards = [];
+    let flippedCards = [];
+    let moves = 0;
+    let pairs = 0;
+    let timer = null;
+    let seconds = 0;
+    let isLocked = false;
+
+    const grid = document.getElementById('gameGrid');
+    const movesEl = document.getElementById('gameMoves');
+    const timeEl = document.getElementById('gameTime');
+    const pairsEl = document.getElementById('gamePairs');
+    const winEl = document.getElementById('gameWin');
+    const winMsg = document.getElementById('gameWinMsg');
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initGame() {
+      if (timer) { clearInterval(timer); timer = null; }
+      seconds = 0; moves = 0; pairs = 0; flippedCards = []; isLocked = false;
+      movesEl.textContent = '0';
+      timeEl.textContent = '0s';
+      pairsEl.textContent = '0 / 6';
+      winEl.classList.remove('show');
+
+      let deck = [];
+      icons.forEach(function(icon, idx) {
+        deck.push({ id: idx, icon: icon, matched: false });
+        deck.push({ id: idx, icon: icon, matched: false });
+      });
+      cards = shuffle(deck);
+
+      grid.innerHTML = '';
+      cards.forEach(function(card, idx) {
+        const div = document.createElement('div');
+        div.className = 'game-card';
+        div.dataset.index = idx;
+        div.innerHTML = '<div class="game-card-inner"><div class="game-card-face game-card-back"></div><div class="game-card-face game-card-front">' + card.icon + '</div></div>';
+        div.addEventListener('click', function() { onCardClick(idx); });
+        grid.appendChild(div);
+      });
+    }
+
+    function onCardClick(idx) {
+      if (isLocked) return;
+      const cardEl = grid.children[idx];
+      if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+      if (!timer) {
+        timer = setInterval(function() {
+          seconds++;
+          timeEl.textContent = seconds + 's';
+        }, 1000);
+      }
+
+      cardEl.classList.add('flipped');
+      flippedCards.push(idx);
+
+      if (flippedCards.length === 2) {
+        moves++;
+        movesEl.textContent = moves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      isLocked = true;
+      const idx1 = flippedCards[0];
+      const idx2 = flippedCards[1];
+      const card1 = cards[idx1];
+      const card2 = cards[idx2];
+
+      if (card1.id === card2.id) {
+        setTimeout(function() {
+          grid.children[idx1].classList.add('matched');
+          grid.children[idx2].classList.add('matched');
+          flippedCards = [];
+          isLocked = false;
+          pairs++;
+          pairsEl.textContent = pairs + ' / 6';
+          if (pairs === 6) {
+            if (timer) { clearInterval(timer); timer = null; }
+            winMsg.textContent = 'Tu as trouvé toutes les paires en ' + moves + ' coups et ' + seconds + ' secondes !';
+            winEl.classList.add('show');
+          }
+        }, 400);
+      } else {
+        setTimeout(function() {
+          grid.children[idx1].classList.remove('flipped');
+          grid.children[idx2].classList.remove('flipped');
+          flippedCards = [];
+          isLocked = false;
+        }, 800);
+      }
+    }
+
+    document.getElementById('gameRestart').addEventListener('click', initGame);
+    initGame();
+  })();
+
+  /* =========================================
+     TIMELINE TOGGLE
+     ========================================= */
+  window.toggleTimeline = function(el) {
+    const detail = el.querySelector('.tl-detail');
+    if (detail) {
+      detail.classList.toggle('open');
+    }
+  };
+
+
+
+  /* =========================================
+     VAULT CODE INPUT
+     ========================================= */
+  const vaultDigits = document.querySelectorAll('.vault-digit');
+  const vaultUnlockBtn = document.getElementById('vaultUnlockBtn');
+  const vaultContents = document.getElementById('vaultContents');
+  const vaultLockIcon = document.getElementById('vaultLockIcon');
+
+  vaultDigits.forEach(function(input, idx) {
+    input.addEventListener('input', function() {
+      if (this.value.length >= 1) {
+        this.value = this.value.slice(-1);
+        this.classList.add('filled');
+        if (idx < vaultDigits.length - 1) {
+          vaultDigits[idx + 1].focus();
+        }
+      }
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && this.value === '' && idx > 0) {
+        vaultDigits[idx - 1].focus();
+        vaultDigits[idx - 1].classList.remove('filled');
+      }
+    });
+    input.addEventListener('focus', function() { this.select(); });
+  });
+
+  vaultUnlockBtn.addEventListener('click', function() {
+    let code = '';
+    vaultDigits.forEach(function(input) { code += input.value; });
+    if (code === VAULT_CODE) {
+      vaultContents.classList.add('open');
+      vaultLockIcon.textContent = '🔓';
+      vaultUnlockBtn.textContent = '✅ Ouvert';
+      vaultUnlockBtn.disabled = true;
+      vaultDigits.forEach(function(d) { d.disabled = true; });
+      // Easter egg click
+      document.getElementById('easterEgg').addEventListener('click', function() {
+        alert('💎 Bravo ! Tu as trouvé le trésor caché des Rubis !\n\n"Loyauté & Fiabilité — jusqu\'au dernier commit."');
+        this.textContent = '✨ ruby_puts "Tu es un vrai Ruby !"';
+      });
+    } else {
+      vaultLockIcon.textContent = '🔒';
+      vaultUnlockBtn.textContent = '❌ Code incorrect';
+      vaultUnlockBtn.style.background = 'linear-gradient(135deg, #c0392b, #e74c3c)';
+      setTimeout(function() {
+        vaultUnlockBtn.textContent = '🔓 Déverrouiller';
+        vaultUnlockBtn.style.background = '';
+      }, 1500);
+      // Shake animation
+      const door = document.getElementById('vaultDoor');
+      door.style.animation = 'none';
+      void door.offsetHeight;
+      door.style.animation = 'shake 0.4s ease';
+      setTimeout(function() { door.style.animation = ''; }, 500);
+    }
+  });
+
+  // Add shake keyframes dynamically
+  const shakeStyle = document.createElement('style');
+  shakeStyle.textContent = '@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }';
+  document.head.appendChild(shakeStyle);
+
+  /* =========================================
+     SCROLL TO TOP BUTTON
+     ========================================= */
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+    // Update nav background
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  scrollTopBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* =========================================
+     SMOOTH SCROLL FOR NAV LINKS
+     ========================================= */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 70;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* =========================================
+     PARTICLE SYSTEM (HERO CANVAS)
+     ========================================= */
+  const canvas = document.getElementById('particles-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animId;
+
+    function resizeCanvas() {
+      const hero = document.querySelector('.hero');
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.shape = Math.random() > 0.5 ? 'circle' : 'diamond';
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        if (this.shape === 'diamond') {
+          ctx.fillStyle = '#e0115f';
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y - this.size);
+          ctx.lineTo(this.x + this.size, this.y);
+          ctx.lineTo(this.x, this.y + this.size);
+          ctx.lineTo(this.x - this.size, this.y);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillStyle = '#ffd700';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(80, Math.floor(canvas.width * canvas.height / 10000));
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.save();
+            ctx.globalAlpha = (1 - dist / 150) * 0.15;
+            ctx.strokeStyle = '#e0115f';
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function(p) {
+        p.update();
+        p.draw();
+      });
+      connectParticles();
+      animId = requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', function() {
+      resizeCanvas();
+      initParticles();
+    });
+  }
+
+  /* =========================================
+     SPARKLE EFFECT ON VALUE CARDS
+     ========================================= */
+  document.querySelectorAll('.value-card').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      for (let i = 0; i < 8; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'sparkle';
+        spark.style.left = (e.pageX + (Math.random() - 0.5) * 60) + 'px';
+        spark.style.top = (e.pageY + (Math.random() - 0.5) * 60) + 'px';
+        spark.style.width = (Math.random() * 4 + 2) + 'px';
+        spark.style.height = spark.style.width;
+        spark.style.background = Math.random() > 0.5 ? '#ffd700' : '#e0115f';
+        document.body.appendChild(spark);
+        setTimeout(function() { spark.remove(); }, 800);
+      }
+    });
+  });
+
+  /* =========================================
+     KEYBOARD SHORTCUT: Konami Code Style
+     ========================================= */
+  let keySequence = [];
+  const secretCode = 'ruby';
+  document.addEventListener('keydown', function(e) {
+    keySequence.push(e.key.toLowerCase());
+    if (keySequence.length > secretCode.length) keySequence.shift();
+    if (keySequence.join('') === secretCode) {
+      document.body.style.border = '4px solid #ffd700';
+      document.body.style.boxShadow = 'inset 0 0 100px rgba(224, 17, 95, 0.2)';
+      alert('💎 Mode secret activé ! Tu as débloqué l\'accès au code source des fondateurs.');
+      keySequence = [];
+    }
+  });
+
+  /* =========================================
+     AI CHAT WIDGET
+     ========================================= */
+  const chatBubble = document.getElementById('chatBubble');
+  const chatPanel = document.getElementById('chatPanel');
+  const chatClose = document.getElementById('chatClose');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const chatBadge = document.getElementById('chatBadge');
+  let chatOpen = false;
+  let chatFirstOpen = true;
+  let chatHistory = [];
+
+  const MISTRAL_API_KEY = '';
+  const MISTRAL_API_URL = 'https://api.mistral.ai/v1/chat/completions';
+  const MISTRAL_MODEL = 'mistral-small-latest';
+
+  function renderMarkdown(text) {
+    // Code blocks first (```...```)
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, function(m, lang, code) {
+      return '<pre><code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code></pre>';
+    });
+    // Inline code (`...`)
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Bold (**...**)
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Italic (*...*) — not inside words
+    text = text.replace(/(?<!\w)\*([^*\n]+)\*(?!\w)/g, '<em>$1</em>');
+    // Links [text](url)
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Headers (#...)
+    text = text.replace(/^### (.+)$/gm, '<h4>$1</h4>');
+    text = text.replace(/^## (.+)$/gm, '<h4>$1</h4>');
+    text = text.replace(/^# (.+)$/gm, '<h4>$1</h4>');
+    // Unordered lists
+    text = text.replace(/^- (.+)$/gm, '<li>$1</li>');
+    text = text.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+    // Newlines
+    text = text.replace(/\n/g, '<br>');
+    return text;
+  }
+
+  function addMessage(text, isUser) {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+    const now = new Date();
+    const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    const content = isUser ? text : renderMarkdown(text);
+    msg.innerHTML = content + '<span class="chat-msg-time">' + time + '</span>';
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showTyping() {
+    const typing = document.createElement('div');
+    typing.className = 'chat-msg bot';
+    typing.id = 'chatTyping';
+    typing.innerHTML = '<div class="chat-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typing = document.getElementById('chatTyping');
+    if (typing) typing.remove();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  async function handleChat() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    addMessage(escapeHtml(text), true);
+    chatSend.disabled = true;
+    showTyping();
+
+    chatHistory.push({ role: 'user', content: text });
+
+    try {
+      const res = await fetch(MISTRAL_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + MISTRAL_API_KEY
+        },
+        body: JSON.stringify({
+          model: MISTRAL_MODEL,
+          messages: [
+            {
+              role: 'system',
+              content: 'Tu es Ruby, l\'IA officielle de la faction Ruby — un groupe de développeurs unis par la loyauté et la fiabilité. Tu réponds TOUJOURS en français, avec un ton chaleureux et un brin d\'humour. Tu utilises parfois l\'émoji 💎. Tu connais la faction sur le bout des doigts : ses valeurs (loyauté, fiabilité, courage, fraternité), ses 24 membres, son histoire qui commence le 15 juin 2026, son coffre secret (code 1312), son jeu de mémoire. Tu es bienveillante et tu parles comme une vraie membre de la faction. Tu n\'inventes pas d\'informations que tu ne connais pas.'
+            },
+            ...chatHistory
+          ],
+          max_tokens: 500,
+          temperature: 0.7
+        })
+      });
+
+      removeTyping();
+
+      if (!res.ok) {
+        const errText = await res.text();
+        addMessage('❌ Désolée, erreur ' + res.status + ' — ' + escapeHtml(errText), false);
+        chatHistory.pop();
+        chatSend.disabled = false;
+        return;
+      }
+
+      const data = await res.json();
+      const reply = data.choices[0].message.content;
+      addMessage(reply.replace(/\n/g, '<br>'), false);
+      chatHistory.push({ role: 'assistant', content: reply });
+
+      // Keep history manageable (last 20 messages)
+      const sysMsg = chatHistory[0];
+      chatHistory = [sysMsg].concat(chatHistory.slice(-20));
+    } catch (err) {
+      removeTyping();
+      addMessage('❌ Erreur réseau — vérifie ta connexion : ' + escapeHtml(err.message), false);
+      chatHistory.pop();
+    }
+
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
+
+  chatBubble.addEventListener('click', function() {
+    chatPanel.classList.add('open');
+    chatBubble.style.display = 'none';
+    chatBadge.style.display = 'none';
+    chatOpen = true;
+    if (chatFirstOpen) {
+      chatFirstOpen = false;
+      setTimeout(function() {
+        addMessage('💎 Bienvenue dans le chat Ruby ! Je suis là pour répondre à toutes tes questions sur la faction. Pose "help" pour voir ce que je sais faire !', false);
+      }, 400);
+    }
+    chatInput.focus();
+  });
+
+  chatClose.addEventListener('click', function() {
+    chatPanel.classList.remove('open');
+    chatBubble.style.display = 'flex';
+    chatOpen = false;
+  });
+
+  chatSend.addEventListener('click', handleChat);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleChat();
+  });
+
+  /* =========================================
+     INIT TOAST
+     ========================================= */
+  console.log('%c💎 Faction Ruby — Loyauté & Fiabilité %c Chargé avec succès !',
+    'color: #e0115f; font-size: 1.5rem; font-weight: bold;',
+    'color: #ffd700; font-size: 1rem;');
+
+})();
+</script>
+</body>
+</html>
